@@ -1,11 +1,19 @@
 <template>
   <main>
+    <div class="modal">
+      <textarea name="note" id="note" cols="30" rows="10"></textarea>
+      <button></button>
+    </div>
     <div class="container">
       <header>
         <h1>Notes</h1>
         <button>+</button>
       </header>
       <div class="cards-container">
+        <div class="card">
+          <p class="main-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta numquam expedita laudantium commodi saepe incidunt deleniti reiciendis eum aliquid qui.</p>
+          <p class="date">12-12-2023</p>
+        </div>
         <div class="card">
           <p class="main-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta numquam expedita laudantium commodi saepe incidunt deleniti reiciendis eum aliquid qui.</p>
           <p class="date">12-12-2023</p>
