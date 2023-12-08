@@ -1,22 +1,48 @@
+<script setup>
+  import {ref, computed} from 'vue'
+  let showModal = ref(false)
+  let note = ref('')
+  let notes = ref([])
+  let formattedDateNow =  computed(() => {
+    const options = {day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC'}
+    return new Date().toLocaleDateString('en-GB', options)
+  })
+  const addNote = () => {
+    if(note.value==='' || note.value.length<10) return alert('Note must be mininum of 10 characters')
+    notes.value.push({
+      id: notes.value.length+1,
+      note: note.value,
+      date: formattedDateNow.value
+    })
+    note.value=''
+    showModal.value=false
+  }
+
+  let getRandomColor = () => `hsl(${Math.random() * 360}, 100%, 75%)`
+  // const getRandomColor = computed(() => `red`)
+
+
+</script>
+
 <template>
   <main>
-    <div class="modal">
-      <textarea name="note" id="note" cols="30" rows="10"></textarea>
-      <button></button>
+    <div class="modal" v-if="showModal">
+      <div class="textarea">
+        <textarea name="note" id="note" cols="30" rows="10" v-model="note"></textarea>
+        <button class="close" @click="showModal=false">x</button>
+      </div>
+      <button class="addNote" @click="addNote">Add Note</button>
     </div>
     <div class="container">
       <header>
         <h1>Notes</h1>
-        <button>+</button>
+        <button @click="showModal=true">+</button>
       </header>
       <div class="cards-container">
-        <div class="card">
-          <p class="main-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta numquam expedita laudantium commodi saepe incidunt deleniti reiciendis eum aliquid qui.</p>
-          <p class="date">12-12-2023</p>
-        </div>
-        <div class="card">
-          <p class="main-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta numquam expedita laudantium commodi saepe incidunt deleniti reiciendis eum aliquid qui.</p>
-          <p class="date">12-12-2023</p>
+        {{ getRandomColor }}
+        <div class="card" v-for="note in notes" :key="note.id" :style="{backgroundColor: getRandomColor}">
+          <p class="main-text">{{note.note}}</p>
+          <p class="date">{{note.date}}</p>
         </div>
       </div>
     </div>
@@ -62,15 +88,58 @@
     width: 200px;
     height: 250px;
     border-radius: 5%;
-    background-color: orange;
+    /* background-color: hsl(201.00097036639724, 100%, 75%); */
     margin-right: 10px;
+    margin-bottom: 10px;
     padding: 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
 
-  .date { 
-    font-weight: bold;
+  .modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(25,25,25,.8);
+    align-items: center;
   }
+
+  .modal .textarea {
+    display: flex;
+    justify-content: center;
+    background-color: yellow;
+    /* width: 5000px; */
+  }
+
+  .modal .close {
+    color: white;
+    position: absolute;
+    z-index: 5;
+    height: 20px;
+    width: 20px;
+    background-color: rgb(201, 80, 4);
+    border: none;
+    border-radius: 5%;
+    right: 645px;
+  }
+
+  .modal textarea {
+    width: 500px;
+    height: 200px;
+    border: none;
+  }
+
+  .modal .addNote {
+    width: 500px;
+    height: 30px;
+    border-radius: 5px;
+    background-color: rgb(201, 80, 4);
+    color: white;
+    border: none;
+  }
+  
 </style>
