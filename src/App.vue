@@ -12,15 +12,14 @@
     notes.value.push({
       id: notes.value.length+1,
       note: note.value,
-      date: formattedDateNow.value
+      backgroundColor: getRandomColor(),
+      date: new Date()
     })
     note.value=''
     showModal.value=false
   }
 
-  let getRandomColor = () => `hsl(${Math.random() * 360}, 100%, 75%)`
-  // const getRandomColor = computed(() => `red`)
-
+  const getRandomColor = () => `hsl(${Math.random() * 360}, 100%, 75%)`
 
 </script>
 
@@ -39,8 +38,7 @@
         <button @click="showModal=true">+</button>
       </header>
       <div class="cards-container">
-        {{ getRandomColor }}
-        <div class="card" v-for="note in notes" :key="note.id" :style="{backgroundColor: getRandomColor}">
+        <div class="card" v-for="note in notes" :key="note.id" :style="{backgroundColor: note.backgroundColor}">
           <p class="main-text">{{note.note}}</p>
           <p class="date">{{note.date}}</p>
         </div>
