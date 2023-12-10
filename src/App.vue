@@ -40,7 +40,7 @@
       <div class="cards-container">
         <div class="card" v-for="note in notes" :key="note.id" :style="{backgroundColor: note.backgroundColor}">
           <p class="main-text">{{note.note}}</p>
-          <p class="date">{{note.date}}</p>
+          <p class="date">{{note.date.toLocaleDateString()}}</p>
         </div>
       </div>
     </div>
