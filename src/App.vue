@@ -1,14 +1,20 @@
 <script setup>
   import {ref, computed} from 'vue'
-  let showModal = ref(false)
-  let note = ref('')
-  let notes = ref([])
-  let formattedDateNow =  computed(() => {
-    const options = {day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC'}
-    return new Date().toLocaleDateString('en-GB', options)
-  })
+  const showModal = ref(false)
+  const note = ref('')
+  const notes = ref([])
+  const errorExists = ref(false)
+  let errorMessage = ''
   const addNote = () => {
-    if(note.value==='' || note.value.length<10) return alert('Note must be mininum of 10 characters')
+    if(note.value==='') {
+      errorExists.value = true
+      errorMessage = 'Note cannot be empty'
+      return
+    } else if (note.value.length<10) {
+      errorExists.value = true
+      errorMessage = 'Note must be more than 10 characters'
+      return
+    }
     notes.value.push({
       id: notes.value.length+1,
       note: note.value,
@@ -17,18 +23,25 @@
     })
     note.value=''
     showModal.value=false
+    errorExists.value=false
+    errorMessage=''
   }
-
+  const closeModal = () => {
+    note.value=''
+    errorMessage=''
+    errorExists.value=false
+    showModal.value=false
+  }
   const getRandomColor = () => `hsl(${Math.random() * 360}, 100%, 75%)`
-
 </script>
 
 <template>
   <main>
     <div class="modal" v-if="showModal">
       <div class="textarea">
-        <textarea name="note" id="note" cols="30" rows="10" v-model="note"></textarea>
-        <button class="close" @click="showModal=false">x</button>
+        <textarea name="note" id="note" cols="30" rows="10" v-model.trim="note"></textarea>
+        <p class="error" v-if="errorExists">{{ errorMessage }}</p>
+        <button class="close" @click="closeModal">x</button>
       </div>
       <button class="addNote" @click="addNote">Add Note</button>
     </div>
@@ -110,6 +123,7 @@
     display: flex;
     justify-content: center;
     background-color: yellow;
+    flex-direction: column;
     /* width: 5000px; */
   }
 
@@ -123,6 +137,7 @@
     border: none;
     border-radius: 5%;
     right: 645px;
+    top: 405px;
   }
 
   .modal textarea {
@@ -138,6 +153,12 @@
     background-color: rgb(201, 80, 4);
     color: white;
     border: none;
+  }
+
+  .modal .error {
+    font-size: smaller;
+    color: darkred;
+    background-color: white;
   }
   
 </style>
